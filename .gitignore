@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.db
+*.sqlite
+*.tsbuildinfo
+
+node_modules/
+dist/
+.vite/
+logs/
+
+.DS_Store
+Thumbs.db
