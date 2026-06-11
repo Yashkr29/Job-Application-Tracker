@@ -34,7 +34,7 @@ export function Applications(): JSX.Element {
           onClick={() =>
             createMutation.mutate({
               title: "Frontend Engineer",
-              company: "Sample Company",
+              company: "New Application",
               source: "LinkedIn",
               status: "SAVED",
               priority: "medium",
@@ -42,12 +42,12 @@ export function Applications(): JSX.Element {
           }
         >
           <Plus className="mr-2 h-4 w-4" />
-          Quick add
+          Add application
         </Button>
       }
     >
       <div className="mb-4 flex flex-wrap gap-2">
-        <Input className="max-w-md" placeholder="Search company or role" value={search} onChange={(event) => setSearch(event.target.value)} />
+        <Input className="max-w-md" placeholder="Search tracked applications" value={search} onChange={(event) => setSearch(event.target.value)} />
         <Button variant={view === "list" ? "primary" : "secondary"} onClick={() => setView("list")} title="List view">
           <List className="h-4 w-4" />
         </Button>

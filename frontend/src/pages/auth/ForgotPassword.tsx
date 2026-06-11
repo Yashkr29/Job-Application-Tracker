@@ -4,7 +4,7 @@ import { Input } from "../../components/ui/input";
 
 export function ForgotPassword(): JSX.Element {
   return (
-    <AuthFrame title="Reset password">
+    <AuthFrame title="Reset password" subtitle="Recover access to your application tracker.">
       <div className="space-y-4">
         <p className="text-center text-sm text-subdued">Enter your email and we will send a six digit OTP.</p>
         <Input placeholder="Email" type="email" />

@@ -13,7 +13,7 @@ export function Dashboard(): JSX.Element {
   const upcoming = useQuery({ queryKey: ["applications", "upcoming"], queryFn: upcomingApplications });
 
   return (
-    <PageWrapper title="Find Jobs">
+    <PageWrapper title="Dashboard">
       <div className="grid gap-3 md:grid-cols-4">
         {stats.data ? (
           <>

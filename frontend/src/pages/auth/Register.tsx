@@ -30,7 +30,7 @@ export function Register(): JSX.Element {
   });
 
   return (
-    <AuthFrame title="Create your account">
+    <AuthFrame title="Create your account" subtitle="Start organizing applications, follow-ups, interviews, and resumes.">
       <form className="space-y-4" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
         <label className="block text-xs font-medium text-text">
           Full name
@@ -52,17 +52,6 @@ export function Register(): JSX.Element {
           Sign up
         </Button>
       </form>
-      <div className="my-6 flex items-center gap-3 text-xs text-subdued">
-        <span className="h-px flex-1 bg-border" />
-        Sign up with
-        <span className="h-px flex-1 bg-border" />
-      </div>
-      <div className="flex justify-center gap-6 text-lg font-semibold">
-        <span className="text-auth">f</span>
-        <span>X</span>
-        <span className="text-accent">G</span>
-        <span>Apple</span>
-      </div>
       <p className="mt-5 text-center text-xs text-subdued">
         Already have an account?{" "}
         <Link className="font-semibold text-primary" to="/login">

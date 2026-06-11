@@ -4,10 +4,11 @@ import { NavLink } from "react-router-dom";
 import { useAuthStore } from "../../store/auth";
 
 const navItems = [
-  { to: "/", label: "Find Jobs" },
+  { to: "/", label: "Dashboard" },
   { to: "/applications", label: "Applications" },
   { to: "/stats", label: "Stats" },
   { to: "/contacts", label: "Contacts" },
+  { to: "/resumes", label: "Resumes" },
 ];
 
 export function TopNav(): JSX.Element {
@@ -21,7 +22,7 @@ export function TopNav(): JSX.Element {
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm text-background">
               <BriefcaseBusiness className="h-4 w-4" />
             </span>
-            Voo
+            JobTrackr
           </NavLink>
           <nav className="hidden items-center gap-6 text-sm md:flex">
             {navItems.map((item) => (
@@ -44,8 +45,8 @@ export function TopNav(): JSX.Element {
           </button>
           <div className="flex items-center gap-2">
             <div className="hidden text-right text-xs md:block">
-              <p className="font-semibold text-text">{user?.name ?? "Emma R."}</p>
-              <p className="text-subdued">Quality Assurance</p>
+              <p className="font-semibold text-text">{user?.name ?? "Job seeker"}</p>
+              <p className="text-subdued">Application workspace</p>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-background">
               <UserRound className="h-5 w-5" />
