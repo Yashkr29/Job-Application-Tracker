@@ -16,7 +16,7 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 copy .env.example .env
-uvicorn app.main:app --reload
+uvicorn app.main:app --host 127.0.0.1 --port 8051 --reload
 ```
 
 The backend defaults to local SQLite for development. Set `DATABASE_URL` to your Supabase PostgreSQL async connection string for production.
@@ -27,7 +27,7 @@ The backend defaults to local SQLite for development. Set `DATABASE_URL` to your
 cd frontend
 npm install
 copy .env.example .env
-npm run dev
+npm run dev -- --host=127.0.0.1 --port=5173
 ```
 
 ## Tests
@@ -43,4 +43,3 @@ pytest
 - Frontend is ready for Vercel via Vite build output.
 - Supabase Storage and SMTP adapters are represented behind services and configured through environment variables.
 - Redis uses a local in-memory fallback for development/tests; set `REDIS_URL` or Upstash vars in production.
-

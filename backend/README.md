@@ -6,7 +6,7 @@ FastAPI backend for the Job Application Tracker.
 
 ```bash
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+uvicorn app.main:app --host 127.0.0.1 --port 8051 --reload
 pytest
 ruff check app tests
 alembic upgrade head
@@ -23,4 +23,3 @@ alembic upgrade head
 - `/health`, `/health/db`, `/health/redis`: monitoring endpoints.
 
 All JSON API responses use `{ success, data, message }`; errors use `{ success: false, error, details }`.
-
