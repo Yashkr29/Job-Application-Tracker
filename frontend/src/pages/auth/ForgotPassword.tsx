@@ -6,9 +6,8 @@ export function ForgotPassword(): JSX.Element {
   return (
     <AuthFrame title="Reset password" subtitle="Recover access to your application tracker.">
       <div className="space-y-4">
-        <p className="text-center text-sm text-subdued">Enter your email and we will send a six digit OTP.</p>
-        <Input placeholder="Email" type="email" />
-        <Button className="w-full bg-auth text-background hover:bg-auth-dark">Send OTP</Button>
+        <Input className="h-12 bg-muted/70" placeholder="Enter email" type="email" />
+        <Button className="h-12 w-full bg-auth text-background hover:bg-auth-dark">Send OTP</Button>
       </div>
     </AuthFrame>
   );

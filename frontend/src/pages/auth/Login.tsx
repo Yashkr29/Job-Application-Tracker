@@ -29,19 +29,24 @@ export function Login(): JSX.Element {
   return (
     <AuthFrame title="Welcome back" subtitle="Sign in to continue tracking your job search.">
       <form className="space-y-4" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
-        <label className="block text-xs font-medium text-text">
+        <label className="block text-sm font-medium text-text">
           Email
-          <Input placeholder="Email" type="email" {...register("email")} />
+          <Input className="mt-2 h-12 bg-muted/70" placeholder="Enter email" type="email" {...register("email")} />
         </label>
-        <label className="block text-xs font-medium text-text">
-          Password
-          <Input placeholder="Password" type="password" {...register("password")} />
+        <label className="block text-sm font-medium text-text">
+          <span className="flex items-center justify-between">
+            Password
+            <Link className="text-xs font-semibold text-primary" to="/forgot-password">
+              Forgot?
+            </Link>
+          </span>
+          <Input className="mt-2 h-12 bg-muted/70" placeholder="Enter password" type="password" {...register("password")} />
         </label>
-        <Button className="w-full bg-auth text-background hover:bg-auth-dark" disabled={mutation.isPending}>
+        <Button className="h-12 w-full bg-auth text-background hover:bg-auth-dark" disabled={mutation.isPending}>
           Sign in
         </Button>
       </form>
-      <p className="mt-5 text-center text-xs text-subdued">
+      <p className="mt-6 text-center text-sm text-subdued">
         New here?{" "}
         <Link className="font-semibold text-primary" to="/register">
           Create account

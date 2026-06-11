@@ -46,23 +46,29 @@ body {
 .auth-wave {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 95% 8%, color-mix(in oklab, var(--color-surface) 60%, transparent) 0 42px, transparent 43px),
-    linear-gradient(160deg, var(--color-auth-dark), var(--color-accent));
+  background: linear-gradient(155deg, var(--color-auth-dark), var(--color-accent));
 }
 
 .auth-wave::after {
-  background:
-    radial-gradient(circle at 0 28px, transparent 0 24px, var(--color-surface) 25px 48px, transparent 49px),
-    radial-gradient(circle at 0 88px, transparent 0 24px, var(--color-surface) 25px 48px, transparent 49px),
-    radial-gradient(circle at 0 148px, transparent 0 24px, var(--color-surface) 25px 48px, transparent 49px),
-    var(--color-surface);
-  bottom: 0;
+  background: color-mix(in oklab, var(--color-surface) 22%, transparent);
+  border-radius: 999px;
   content: "";
+  height: 360px;
   position: absolute;
-  right: -1px;
-  top: 0;
-  width: 28%;
+  right: -170px;
+  top: 60px;
+  width: 360px;
+}
+
+.auth-wave::before {
+  background: color-mix(in oklab, var(--color-surface) 12%, transparent);
+  border-radius: 999px;
+  bottom: -110px;
+  content: "";
+  height: 260px;
+  left: -90px;
+  position: absolute;
+  width: 260px;
 }
 
 .portrait-tile {
