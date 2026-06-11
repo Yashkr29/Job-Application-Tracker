@@ -6,8 +6,15 @@ export type ApplicationPayload = {
   company: string;
   location?: string;
   source?: string;
+  job_url?: string;
+  description?: string;
   status?: ApplicationStatus;
   priority?: "low" | "medium" | "high" | "dream";
+  salary_min?: number;
+  salary_max?: number;
+  currency?: string;
+  applied_at?: string;
+  follow_up_date?: string;
 };
 
 export async function listApplications(search = ""): Promise<ApplicationList> {
@@ -29,4 +36,3 @@ export async function upcomingApplications(): Promise<JobApplication[]> {
   const response = await api.get<ApiResponse<JobApplication[]>>("/applications/upcoming");
   return response.data.data;
 }
-

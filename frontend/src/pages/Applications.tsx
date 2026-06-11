@@ -3,7 +3,8 @@ import { LayoutGrid, List, Plus } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { createApplication, listApplications } from "../api/applications";
+import { createApplication, listApplications, type ApplicationPayload } from "../api/applications";
+import { ApplicationFormModal } from "../components/applications/ApplicationFormModal";
 import { JobSearchBoard } from "../components/applications/JobSearchBoard";
 import { KanbanBoard } from "../components/applications/KanbanBoard";
 import { PageWrapper } from "../components/layout/PageWrapper";
@@ -14,6 +15,7 @@ import { Input } from "../components/ui/input";
 export function Applications(): JSX.Element {
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"list" | "kanban">("list");
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const queryClient = useQueryClient();
   const applications = useQuery({ queryKey: ["applications", search], queryFn: () => listApplications(search) });
   const createMutation = useMutation({
@@ -26,21 +28,16 @@ export function Applications(): JSX.Element {
 
   const items = applications.data?.items ?? [];
 
+  async function submitApplication(payload: ApplicationPayload): Promise<void> {
+    await createMutation.mutateAsync(payload);
+    setIsFormOpen(false);
+  }
+
   return (
     <PageWrapper
       title="Applications"
       actions={
-        <Button
-          onClick={() =>
-            createMutation.mutate({
-              title: "Frontend Engineer",
-              company: "New Application",
-              source: "LinkedIn",
-              status: "SAVED",
-              priority: "medium",
-            })
-          }
-        >
+        <Button onClick={() => setIsFormOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add application
         </Button>
@@ -56,12 +53,13 @@ export function Applications(): JSX.Element {
         </Button>
       </div>
       {view === "list" ? (
-        <JobSearchBoard applications={items} />
+        <JobSearchBoard applications={items} onAddApplication={() => setIsFormOpen(true)} />
       ) : items.length === 0 ? (
         <EmptyState title="No applications match your filters." />
       ) : (
         <KanbanBoard applications={items} />
       )}
+      <ApplicationFormModal isOpen={isFormOpen} isSaving={createMutation.isPending} onClose={() => setIsFormOpen(false)} onSubmit={submitApplication} />
     </PageWrapper>
   );
 }

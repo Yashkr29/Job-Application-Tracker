@@ -1,136 +1,13 @@
-import { Bookmark, Check, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { Bookmark, MapPin, Plus, Search, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import type { JobApplication } from "../../types/api";
-import { statusLabel } from "../../utils/status";
+import type { ApplicationStatus, JobApplication, Priority } from "../../types/api";
+import { statuses, statusLabel } from "../../utils/status";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-const chips = ["Saved", "Applied", "Phone screen", "Interview", "Technical", "Final round", "Offer", "Rejected", "Ghosted", "Follow-up due"];
-
-const sampleApplications: JobApplication[] = [
-  {
-    id: "sample-1",
-    title: "Frontend Engineer",
-    company: "Acme Labs",
-    location: "Remote",
-    source: "LinkedIn",
-    job_url: null,
-    description: null,
-    status: "PHONE_SCREEN",
-    priority: "high",
-    salary_min: null,
-    salary_max: null,
-    currency: "INR",
-    applied_at: null,
-    follow_up_date: null,
-    interview_at: null,
-    offer_deadline: null,
-    created_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "sample-2",
-    title: "Backend Developer",
-    company: "Northstar Systems",
-    location: "Bengaluru, IN",
-    source: "Referral",
-    job_url: null,
-    description: null,
-    status: "APPLIED",
-    priority: "dream",
-    salary_min: null,
-    salary_max: null,
-    currency: "INR",
-    applied_at: null,
-    follow_up_date: null,
-    interview_at: null,
-    offer_deadline: null,
-    created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "sample-3",
-    title: "Full Stack Engineer",
-    company: "BrightLayer",
-    location: "Pune, IN",
-    source: "Company site",
-    job_url: null,
-    description: null,
-    status: "TECHNICAL",
-    priority: "medium",
-    salary_min: null,
-    salary_max: null,
-    currency: "INR",
-    applied_at: null,
-    follow_up_date: null,
-    interview_at: null,
-    offer_deadline: null,
-    created_at: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "sample-4",
-    title: "Product Engineer",
-    company: "LaunchDesk",
-    location: "Hyderabad, IN",
-    source: "AngelList",
-    job_url: null,
-    description: null,
-    status: "INTERVIEW",
-    priority: "high",
-    salary_min: null,
-    salary_max: null,
-    currency: "INR",
-    applied_at: null,
-    follow_up_date: null,
-    interview_at: null,
-    offer_deadline: null,
-    created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "sample-5",
-    title: "Software Developer Intern",
-    company: "CloudNest",
-    location: "Gurugram, IN",
-    source: "Naukri",
-    job_url: null,
-    description: null,
-    status: "SAVED",
-    priority: "low",
-    salary_min: null,
-    salary_max: null,
-    currency: "INR",
-    applied_at: null,
-    follow_up_date: null,
-    interview_at: null,
-    offer_deadline: null,
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "sample-6",
-    title: "Data Analyst",
-    company: "MetricWorks",
-    location: "Mumbai, IN",
-    source: "LinkedIn",
-    job_url: null,
-    description: null,
-    status: "FINAL_ROUND",
-    priority: "medium",
-    salary_min: null,
-    salary_max: null,
-    currency: "INR",
-    applied_at: null,
-    follow_up_date: null,
-    interview_at: null,
-    offer_deadline: null,
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
+const priorityOptions: Priority[] = ["low", "medium", "high", "dream"];
 
 function relativeTime(iso: string): string {
   const hours = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 3_600_000));
@@ -146,16 +23,22 @@ function logoColor(index: number): string {
   return colors[index % colors.length];
 }
 
-export function JobSearchBoard({ applications }: { applications: JobApplication[] }): JSX.Element {
+export function JobSearchBoard({ applications, onAddApplication }: { applications: JobApplication[]; onAddApplication?: () => void }): JSX.Element {
   const [search, setSearch] = useState("");
-  const jobs = applications.length > 0 ? applications : sampleApplications;
+  const [location, setLocation] = useState("");
+  const [statusFilter, setStatusFilter] = useState<ApplicationStatus | "ALL">("ALL");
+  const [priorityFilter, setPriorityFilter] = useState<Priority | "ALL">("ALL");
   const filteredJobs = useMemo(() => {
     const term = search.trim().toLowerCase();
-    if (!term) {
-      return jobs;
-    }
-    return jobs.filter((job) => `${job.title} ${job.company} ${job.location ?? ""}`.toLowerCase().includes(term));
-  }, [jobs, search]);
+    const locationTerm = location.trim().toLowerCase();
+    return applications.filter((job) => {
+      const matchesSearch = !term || `${job.title} ${job.company} ${job.source ?? ""} ${job.description ?? ""}`.toLowerCase().includes(term);
+      const matchesLocation = !locationTerm || (job.location ?? "").toLowerCase().includes(locationTerm);
+      const matchesStatus = statusFilter === "ALL" || job.status === statusFilter;
+      const matchesPriority = priorityFilter === "ALL" || job.priority === priorityFilter;
+      return matchesSearch && matchesLocation && matchesStatus && matchesPriority;
+    });
+  }, [applications, location, priorityFilter, search, statusFilter]);
 
   return (
     <div className="overflow-hidden rounded-app bg-surface shadow-soft">
@@ -186,16 +69,35 @@ export function JobSearchBoard({ applications }: { applications: JobApplication[
           </label>
           <label className="flex items-center gap-3 px-3">
             <MapPin className="h-5 w-5 text-subdued" />
-            <Input className="border-0 bg-transparent shadow-none focus:border-0" placeholder="Location or work mode" />
+            <Input
+              className="border-0 bg-transparent shadow-none focus:border-0"
+              placeholder="Location or work mode"
+              value={location}
+              onChange={(event) => setLocation(event.target.value)}
+            />
           </label>
-          <Button className="h-12 rounded-[24px] px-10">Search apps</Button>
+          <Button className="h-12 rounded-[24px] px-10" type="button">
+            Search apps
+          </Button>
         </div>
       </section>
 
       <div className="flex gap-2 overflow-x-auto border-b border-border bg-surface px-4 py-3">
-        {chips.map((chip) => (
-          <button key={chip} className="shrink-0 rounded-app border border-border px-3 py-1 text-xs text-text hover:bg-muted">
-            {chip}
+        <button
+          className={`shrink-0 rounded-app border px-3 py-1 text-xs ${statusFilter === "ALL" ? "border-primary bg-primary text-background" : "border-border text-text hover:bg-muted"}`}
+          onClick={() => setStatusFilter("ALL")}
+          type="button"
+        >
+          All
+        </button>
+        {statuses.map((status) => (
+          <button
+            key={status}
+            className={`shrink-0 rounded-app border px-3 py-1 text-xs ${statusFilter === status ? "border-primary bg-primary text-background" : "border-border text-text hover:bg-muted"}`}
+            onClick={() => setStatusFilter(status)}
+            type="button"
+          >
+            {statusLabel(status)}
           </button>
         ))}
       </div>
@@ -206,41 +108,61 @@ export function JobSearchBoard({ applications }: { applications: JobApplication[
             <h2 className="font-semibold text-text">Filter</h2>
             <SlidersHorizontal className="h-4 w-4 text-subdued" />
           </div>
-          <Input placeholder="Company, skill, tag..." />
+          <Input placeholder="Company, source, note..." value={search} onChange={(event) => setSearch(event.target.value)} />
           <div>
             <h3 className="mb-3 font-semibold text-text">Pipeline stage</h3>
-            <div className="space-y-2 text-subdued">
-              {["Applied", "Interview", "Offer"].map((item) => (
-                <label key={item} className="flex items-center gap-2">
-                  <input className="accent-primary" type="checkbox" />
-                  {item}
-                </label>
+            <div className="space-y-2">
+              {(["APPLIED", "INTERVIEW", "OFFER"] as ApplicationStatus[]).map((status) => (
+                <button
+                  key={status}
+                  className={`block w-full rounded-app px-3 py-2 text-left text-sm ${statusFilter === status ? "bg-primary text-background" : "text-subdued hover:bg-muted hover:text-text"}`}
+                  onClick={() => setStatusFilter(statusFilter === status ? "ALL" : status)}
+                  type="button"
+                >
+                  {statusLabel(status)}
+                </button>
               ))}
             </div>
           </div>
           <div>
-            <h3 className="mb-3 font-semibold text-text">Tracker filters</h3>
-            <div className="space-y-2 text-subdued">
-              {["Follow-up due", "Interview soon", "Resume linked"].map((item) => (
-                <label key={item} className="flex items-center gap-2">
-                  <span className="flex h-4 w-4 items-center justify-center rounded bg-primary text-background">
-                    <Check className="h-3 w-3" />
-                  </span>
-                  {item}
-                </label>
+            <h3 className="mb-3 font-semibold text-text">Priority</h3>
+            <div className="space-y-2">
+              <button
+                className={`block w-full rounded-app px-3 py-2 text-left text-sm ${priorityFilter === "ALL" ? "bg-muted text-text" : "text-subdued hover:bg-muted hover:text-text"}`}
+                onClick={() => setPriorityFilter("ALL")}
+                type="button"
+              >
+                All priorities
+              </button>
+              {priorityOptions.map((priority) => (
+                <button
+                  key={priority}
+                  className={`block w-full rounded-app px-3 py-2 text-left text-sm capitalize ${priorityFilter === priority ? "bg-primary text-background" : "text-subdued hover:bg-muted hover:text-text"}`}
+                  onClick={() => setPriorityFilter(priority)}
+                  type="button"
+                >
+                  {priority}
+                </button>
               ))}
-              <label className="flex items-center gap-2">
-                <span className="h-4 w-4 rounded border border-border" />
-                Archived
-              </label>
             </div>
-          </div>
-          <div>
-            <h3 className="font-semibold text-text">Priority</h3>
           </div>
         </aside>
 
         <div className="space-y-2">
+          {filteredJobs.length === 0 && (
+            <div className="flex min-h-72 flex-col items-center justify-center rounded-app border border-dashed border-border bg-muted p-8 text-center">
+              <p className="text-base font-semibold text-text">No applications found</p>
+              <p className="mt-2 max-w-sm text-sm text-subdued">
+                Add your first application or clear the filters to see tracked roles from the backend.
+              </p>
+              {onAddApplication && (
+                <Button className="mt-5" onClick={onAddApplication} type="button">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add application
+                </Button>
+              )}
+            </div>
+          )}
           {filteredJobs.map((job, index) => (
             <article key={job.id} className="grid items-center gap-3 rounded-app px-3 py-3 transition hover:bg-muted md:grid-cols-[1fr_auto_auto_auto]">
               <div className="flex items-center gap-4">
