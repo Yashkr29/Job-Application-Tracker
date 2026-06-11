@@ -6,8 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { login } from "../../api/auth";
+import { AuthFrame } from "../../components/layout/AuthFrame";
 import { Button } from "../../components/ui/button";
-import { Card } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 
 const schema = z.object({
@@ -27,22 +27,37 @@ export function Login(): JSX.Element {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm">
-        <h1 className="mb-1 text-xl font-semibold text-text">Welcome back</h1>
-        <p className="mb-6 text-sm text-subdued">Track every role from saved to offer.</p>
-        <form className="space-y-3" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
+    <AuthFrame title="Sign in to your account">
+      <form className="space-y-4" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
+        <label className="block text-xs font-medium text-text">
+          Email
           <Input placeholder="Email" type="email" {...register("email")} />
+        </label>
+        <label className="block text-xs font-medium text-text">
+          Password
           <Input placeholder="Password" type="password" {...register("password")} />
-          <Button className="w-full" disabled={mutation.isPending}>
-            Sign in
-          </Button>
-        </form>
-        <Link className="mt-4 block text-sm text-primary" to="/register">
-          Create an account
+        </label>
+        <Button className="w-full bg-auth text-background hover:bg-auth-dark" disabled={mutation.isPending}>
+          Sign in
+        </Button>
+      </form>
+      <div className="my-6 flex items-center gap-3 text-xs text-subdued">
+        <span className="h-px flex-1 bg-border" />
+        Sign in with
+        <span className="h-px flex-1 bg-border" />
+      </div>
+      <div className="flex justify-center gap-6 text-lg font-semibold">
+        <span className="text-auth">f</span>
+        <span>X</span>
+        <span className="text-accent">G</span>
+        <span>Apple</span>
+      </div>
+      <p className="mt-5 text-center text-xs text-subdued">
+        New here?{" "}
+        <Link className="font-semibold text-primary" to="/register">
+          Create account
         </Link>
-      </Card>
-    </div>
+      </p>
+    </AuthFrame>
   );
 }
-

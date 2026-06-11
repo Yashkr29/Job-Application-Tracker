@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { createApplication, listApplications } from "../api/applications";
-import { ApplicationCard } from "../components/applications/ApplicationCard";
+import { JobSearchBoard } from "../components/applications/JobSearchBoard";
 import { KanbanBoard } from "../components/applications/KanbanBoard";
 import { PageWrapper } from "../components/layout/PageWrapper";
 import { EmptyState } from "../components/shared/EmptyState";
@@ -55,18 +55,13 @@ export function Applications(): JSX.Element {
           <LayoutGrid className="h-4 w-4" />
         </Button>
       </div>
-      {items.length === 0 ? (
+      {view === "list" ? (
+        <JobSearchBoard applications={items} />
+      ) : items.length === 0 ? (
         <EmptyState title="No applications match your filters." />
-      ) : view === "kanban" ? (
-        <KanbanBoard applications={items} />
       ) : (
-        <div className="grid gap-3 lg:grid-cols-2">
-          {items.map((item) => (
-            <ApplicationCard key={item.id} application={item} />
-          ))}
-        </div>
+        <KanbanBoard applications={items} />
       )}
     </PageWrapper>
   );
 }
-

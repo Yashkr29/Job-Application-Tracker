@@ -15,7 +15,11 @@ export default {
         primary: "var(--color-primary)",
         accent: "var(--color-accent)",
         success: "var(--color-success)",
-        danger: "var(--color-danger)"
+        danger: "var(--color-danger)",
+        hero: "var(--color-hero)",
+        "soft-blue": "var(--color-soft-blue)",
+        auth: "var(--color-auth)",
+        "auth-dark": "var(--color-auth-dark)"
       },
       borderRadius: {
         app: "8px"
@@ -27,4 +31,3 @@ export default {
   },
   plugins: []
 } satisfies Config;
-

@@ -1,16 +1,15 @@
-import { Card } from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
+import { AuthFrame } from "../../components/layout/AuthFrame";
 import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 
 export function ForgotPassword(): JSX.Element {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm space-y-3">
-        <h1 className="text-xl font-semibold text-text">Reset password</h1>
+    <AuthFrame title="Reset password">
+      <div className="space-y-4">
+        <p className="text-center text-sm text-subdued">Enter your email and we will send a six digit OTP.</p>
         <Input placeholder="Email" type="email" />
-        <Button className="w-full">Send OTP</Button>
-      </Card>
-    </div>
+        <Button className="w-full bg-auth text-background hover:bg-auth-dark">Send OTP</Button>
+      </div>
+    </AuthFrame>
   );
 }
-

@@ -6,8 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { register as registerUser } from "../../api/auth";
+import { AuthFrame } from "../../components/layout/AuthFrame";
 import { Button } from "../../components/ui/button";
-import { Card } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 
 const schema = z.object({
@@ -30,22 +30,45 @@ export function Register(): JSX.Element {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm">
-        <h1 className="mb-6 text-xl font-semibold text-text">Create account</h1>
-        <form className="space-y-3" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
+    <AuthFrame title="Create your account">
+      <form className="space-y-4" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
+        <label className="block text-xs font-medium text-text">
+          Full name
           <Input placeholder="Name" {...register("name")} />
+        </label>
+        <label className="block text-xs font-medium text-text">
+          Email
           <Input placeholder="Email" type="email" {...register("email")} />
+        </label>
+        <label className="block text-xs font-medium text-text">
+          Password
           <Input placeholder="Password" type="password" {...register("password")} />
-          <Button className="w-full" disabled={mutation.isPending}>
-            Register
-          </Button>
-        </form>
-        <Link className="mt-4 block text-sm text-primary" to="/login">
-          Already have an account?
+        </label>
+        <label className="flex items-center gap-2 text-xs text-subdued">
+          <input className="h-4 w-4 rounded border-border accent-auth" type="checkbox" defaultChecked />
+          I agree to the terms and conditions.
+        </label>
+        <Button className="w-full bg-auth text-background hover:bg-auth-dark" disabled={mutation.isPending}>
+          Sign up
+        </Button>
+      </form>
+      <div className="my-6 flex items-center gap-3 text-xs text-subdued">
+        <span className="h-px flex-1 bg-border" />
+        Sign up with
+        <span className="h-px flex-1 bg-border" />
+      </div>
+      <div className="flex justify-center gap-6 text-lg font-semibold">
+        <span className="text-auth">f</span>
+        <span>X</span>
+        <span className="text-accent">G</span>
+        <span>Apple</span>
+      </div>
+      <p className="mt-5 text-center text-xs text-subdued">
+        Already have an account?{" "}
+        <Link className="font-semibold text-primary" to="/login">
+          Sign in
         </Link>
-      </Card>
-    </div>
+      </p>
+    </AuthFrame>
   );
 }
-

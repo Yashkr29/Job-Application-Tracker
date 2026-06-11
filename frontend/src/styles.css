@@ -3,16 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #3f6f5f;
-  --color-background: #f8faf8;
+  --color-primary: #2436d8;
+  --color-background: #eef2f1;
   --color-surface: #ffffff;
-  --color-muted: #eef3ef;
-  --color-text: #17211b;
-  --color-subdued: #66736b;
-  --color-border: #dbe5dd;
-  --color-accent: #c9a86a;
-  --color-success: #2f8f5b;
-  --color-danger: #bd4b4b;
+  --color-muted: #f4f6f7;
+  --color-text: #10131a;
+  --color-subdued: #7c8493;
+  --color-border: #dfe5e8;
+  --color-accent: #0a73d9;
+  --color-success: #296f4c;
+  --color-danger: #d34e4e;
+  --color-hero: #dfe7e3;
+  --color-soft-blue: #eaf7ff;
+  --color-auth: #0967c7;
+  --color-auth-dark: #0757af;
 }
 
 .dark {
@@ -39,3 +43,29 @@ body {
   box-sizing: border-box;
 }
 
+.auth-wave {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 95% 8%, color-mix(in oklab, var(--color-surface) 60%, transparent) 0 42px, transparent 43px),
+    linear-gradient(160deg, var(--color-auth-dark), var(--color-accent));
+}
+
+.auth-wave::after {
+  background:
+    radial-gradient(circle at 0 28px, transparent 0 24px, var(--color-surface) 25px 48px, transparent 49px),
+    radial-gradient(circle at 0 88px, transparent 0 24px, var(--color-surface) 25px 48px, transparent 49px),
+    radial-gradient(circle at 0 148px, transparent 0 24px, var(--color-surface) 25px 48px, transparent 49px),
+    var(--color-surface);
+  bottom: 0;
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 0;
+  width: 28%;
+}
+
+.portrait-tile {
+  filter: grayscale(1);
+  transform: rotate(var(--tilt));
+}
